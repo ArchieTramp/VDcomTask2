@@ -1,6 +1,8 @@
 package VDcom;
 
 import java.io.*;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 /**
  * На вход передается целое число, больше 0, кратное 2 (n). Создается файл с именем
@@ -14,53 +16,66 @@ import java.io.*;
  */
 
 public class task2 {
-    public static void main(String[] args) throws IOException {
-        System.out.println("ready steady go");
+    public static void main(String[] args) throws IOException, InputMismatchException {
 
-        File newFile = new File("C://Users//Artur//IdeaProjects//VDcomTask2", "out.txt");
-        System.out.println(newFile.createNewFile());
-        FileWriter fileWriter = new FileWriter("out.txt", false);
-        int txt = 0;
-        fileWriter.write(txt);
-        fileWriter.flush();
+        try {
+            System.out.println("Ввести четное число");
+            Scanner scanner = new Scanner(System.in);
+            int num = scanner.nextInt();
 
-            //как то запаралеллить их
-            new createThread().start();
-            new createThread().start();
+            File newFileForNum = new File("C://Users//Artur//IdeaProjects//VDcomTask2", "num.txt");
+            System.out.println(newFileForNum.createNewFile());
+            FileWriter fW = new FileWriter("num.txt", false);
+            fW.write(num);
+            fW.flush();
 
+            File newFile = new File("C://Users//Artur//IdeaProjects//VDcomTask2", "out.txt");
+            System.out.println(newFile.createNewFile());
+            FileWriter fileWriter = new FileWriter("out.txt", false);
+            int txt = 0;
+            fileWriter.write(txt);
+            fileWriter.flush();
+            for (int i = 0; i < 2; i++) {
+                new createThread().start();
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Введено не числовое значение или слишком большое число");
 
+        }
     }
 }
 
 
 class createThread extends Thread {
 
-    createThread() {
 
-    }
     @Override
     public void run() {
+
         System.out.println("Start " + Thread.currentThread().getName());
 
 
         try {
             FileReader fileReader = new FileReader("out.txt");
             int c = fileReader.read();
-            System.out.println(c + " взял поток " + Thread.currentThread().getName());
+            FileReader numSender = new FileReader("num.txt");
 
-            //как то передать num
-            while (c <= 10) {
-                System.out.println(c);
-                c = c + 1;
-                System.out.println(c + " " + Thread.currentThread().getName());
-                FileWriter fileWriter = new FileWriter("out.txt", true);
-                String g = String.valueOf(c);
-                fileWriter.write(g + " ");
-                fileWriter.flush();
-            }
+            int z = numSender.read();
+            if (z % 2 == 0) {
+                while (c < z) {
+                    System.out.println(c);
+                    c = c + 1;
+                    System.out.println(c + " " + Thread.currentThread().getName());
+                    FileWriter fileWriter = new FileWriter("out.txt", false);
+                    String g = String.valueOf(c);
+                    fileWriter.write(g);
+                    fileWriter.flush();
+                }
+            } else System.out.println("нечетное число");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
+
+
