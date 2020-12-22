@@ -1,6 +1,9 @@
 package VDcom;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -25,21 +28,22 @@ public class task2 {
             Scanner scanner = new Scanner(System.in);
             int num = scanner.nextInt();
 
-            File newFileForNum = new File("C://Users//Artur//IdeaProjects//VDcomTask2", "num.txt");
-            System.out.println(newFileForNum.createNewFile());
+            File newFileForNum = new File(".src/main/num.txt");
             FileWriter fW = new FileWriter("num.txt", false);
             fW.write(num);
             fW.flush();
 
-            File newFile = new File("C://Users//Artur//IdeaProjects//VDcomTask2", "out.txt");
-            System.out.println(newFile.createNewFile());
+            File newFile = new File(".src/main/out.txt");
             FileWriter fileWriter = new FileWriter("out.txt", false);
             int txt = 0;
             fileWriter.write(txt);
             fileWriter.flush();
+
             for (int i = 0; i < 2; i++) {
                 new createThread().start();
             }
+
+
         } catch (InputMismatchException e) {
             System.out.println("Введено не числовое значение или слишком большое число");
 
